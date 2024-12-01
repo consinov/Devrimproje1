@@ -1,3 +1,0 @@
-bundle install
-jekyll clean
-jekyll build
