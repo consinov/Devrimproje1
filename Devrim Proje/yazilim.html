@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yazılım Mühendisliği</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+        }
+
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            animation: neonText 1.5s infinite alternate;
+            text-shadow: 0 0 10px #0f0, 0 0 20px #0f0, 0 0 30px #0f0;
+        }
+
+        @keyframes neonText {
+            from {
+                text-shadow: 0 0 10px #0f0, 0 0 20px #0f0, 0 0 30px #0f0;
+            }
+            to {
+                text-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 15px #0f0;
+            }
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .info-card {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            animation: borderGlow 2s infinite alternate;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+
+        @keyframes borderGlow {
+            from {
+                box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            }
+        }
+
+        h2 {
+            color: #0f0;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 5px #0f0;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: #0f0;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            color: #0f0;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            text-shadow: 0 0 10px #0f0;
+            transform: scale(1.1);
+        }
+
+        .code-icon {
+            font-size: 5rem;
+            margin: 2rem 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Kod Editörü Görünümü */
+        .code-editor {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 2rem;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-editor::before {
+            content: '> Hello World';
+            display: block;
+            color: #0f0;
+            animation: typing 2s steps(11) infinite;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid #0f0;
+            width: fit-content;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 11ch }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrixCanvas"></canvas>
+    <a href="index.html" class="back-button">
+        <i class="fas fa-arrow-left"></i> Geri
+    </a>
+
+    <div class="container">
+        <div class="header">
+            <i class="fas fa-code code-icon"></i>
+            <h1>Yazılım Mühendisliği</h1>
+            <div class="code-editor"></div>
+        </div>
+
+        <div class="content-grid">
+            <div class="info-card">
+                <h2>Programlama Dilleri</h2>
+                <ul>
+                    <li>Python & JavaScript</li>
+                    <li>Java & C++</li>
+                    <li>React & Angular</li>
+                    <li>Node.js & Django</li>
+                    <li>SQL & NoSQL</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h2>Kariyer Alanları</h2>
+                <ul>
+                    <li>Full Stack Developer</li>
+                    <li>Yapay Zeka Uzmanı</li>
+                    <li>DevOps Mühendisi</li>
+                    <li>Mobil Uygulama Geliştirici</li>
+                    <li>Siber Güvenlik Uzmanı</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h2>Güncel Teknolojiler</h2>
+                <ul>
+                    <li>Yapay Zeka & Machine Learning</li>
+                    <li>Blockchain & Web3</li>
+                    <li>Cloud Computing</li>
+                    <li>IoT & Edge Computing</li>
+                    <li>Mikroservis Mimarileri</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h2>Yazılım Metodolojileri</h2>
+                <ul>
+                    <li>Agile & Scrum</li>
+                    <li>DevOps & CI/CD</li>
+                    <li>Test Driven Development</li>
+                    <li>Clean Code Principles</li>
+                    <li>Design Patterns</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix yağmuru efekti
+        window.onload = function() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            const charArray = chars.split('');
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const char = charArray[Math.floor(Math.random() * charArray.length)];
+                    ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            setInterval(draw, 35);
+
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        };
+    </script>
+</body>
+</html> 

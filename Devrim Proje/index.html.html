@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mühendislik Dalları</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- Matrix Canvas -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- Navbar ve diğer içerik -->
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <span>SUNFYRE</span>
+                <div class="dragon-container">
+                    <i class="fas fa-dragon"></i>
+                    <div class="fire-effect"></div>
+                </div>
+            </a>
+            <nav class="navbar-links">
+                <a href="#hakkimizda" class="nav-link">Hakkımızda</a>
+                <a href="#muhendislik-dallari" class="nav-link">Mühendislik</a>
+                <a href="#iletisim" class="nav-link">İletişim</a>
+            </nav>
+        </div>
+    </div>
+
+    <style>
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+            background-color: #000;
+        }
+
+        body {
+            background-color: #000000;
+            margin: 0;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        /* Diğer stiller aynı kalacak */
+    </style>
+
+    <script>
+        // Matrix yağmuru efekti
+        window.onload = function() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Canvas boyutunu pencere boyutuna ayarla
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Karakterler (Rastgele semboller ve sayılar)
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            const charArray = chars.split('');
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+
+            // Her sütun için başlangıç Y pozisyonları
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+
+            function draw() {
+                // Yarı saydam siyah arka plan (iz efekti için)
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Yeşil metin rengi ve font ayarları
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
+
+                // Her sütun için karakterleri çiz
+                for (let i = 0; i < drops.length; i++) {
+                    // Rastgele karakter seç
+                    const char = charArray[Math.floor(Math.random() * charArray.length)];
+                    
+                    // Karakteri çiz
+                    ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                    // Karakter yere ulaştığında veya rastgele olarak yeniden başlat
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+
+                    // Karakteri aşağı hareket ettir
+                    drops[i]++;
+                }
+            }
+
+            // Animasyonu başlat
+            setInterval(draw, 35);
+        };
+    </script>
+
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <span>SUNFYRE</span>
+                <div class="dragon-container">
+                    <i class="fas fa-dragon"></i>
+                    <div class="fire-effect"></div>
+                </div>
+            </a>
+            <nav class="navbar-links">
+                <a href="#hakkimizda" class="nav-link">Hakkımızda</a>
+                <a href="#muhendislik-dallari" class="nav-link">Mühendislik</a>
+                <a href="#iletisim" class="nav-link">İletişim</a>
+                <a href="#Fiyatlandırma" class="nav-link">Fiyatlandırma</a>
+
+            </nav>
+        </div>
+    </div>
+
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+        }
+
+        .navbar-logo {
+            text-decoration: none;
+            color: #fff;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            text-transform: uppercase;
+            padding-left: 20px;
+            margin-right: auto;
+        }
+
+        .navbar-logo span {
+            background: linear-gradient(to right, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .dragon-container {
+            position: relative;
+            display: inline-block;
+            margin-left: 15px;
+        }
+
+        .dragon-svg {
+            transform-origin: center;
+            transition: all 0.3s ease;
+        }
+
+        .dragon-body, .dragon-horns {
+            transition: all 0.3s ease;
+        }
+
+        .fire-main {
+            opacity: 0.8;
+            filter: blur(3px);
+        }
+
+        .fire-particles {
+            opacity: 0.7;
+            filter: blur(1px);
+        }
+
+        .fire-group {
+            transform-origin: 70px 52px;
+            animation: fireAnimation 0.7s infinite alternate;
+        }
+
+        @keyframes fireAnimation {
+            from {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            to {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .navbar-logo:hover .dragon-svg {
+            transform: scale(1.1);
+        }
+
+        .navbar-logo:hover .dragon-body {
+            fill: #ff4d00;
+        }
+
+        .navbar-logo:hover .dragon-horns {
+            stroke: #ff4d00;
+        }
+
+        .navbar-logo:hover .dragon-scales {
+            stroke: #ff6b00;
+        }
+
+        .navbar-logo:hover .fire-group {
+            animation: fireAnimation 0.5s infinite alternate;
+        }
+
+        .navbar-links {
+            grid-column: 2;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 500;
+            padding: 0.7rem 1.2rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #09ff00;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: #09ff00;
+        }
+
+        .nav-link:hover::after {
+            width: 70%;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .navbar-logo {
+                justify-content: center;
+                padding-left: 0;
+            }
+
+            .navbar-links {
+                justify-content: center;
+                gap: 1.5rem;
+            }
+
+            .nav-link {
+                padding: 0.5rem 0.8rem;
+                font-size: 15px;
+            }
+        }
+
+        body {
+            padding-top: 70px; /* Navbar'ın altında içerik başlasın */
+            background-color: #000000;
+        }
+
+        .avatar-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
+        }
+        
+        .avatar img {
+            width: 60%;
+            height: 60%;
+            object-fit: contain;
+        }
+        
+        .avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--primary-color);
+        }
+
+        .avatar-circle {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            overflow: visible !important;
+        }
+
+        .speech-bubble {
+            position: absolute;
+            background: #fff;
+            border-radius: 20px;
+            padding: 15px;
+            width: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -80px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #fff;
+        }
+
+        .avatar-circle:hover .speech-bubble {
+            visibility: visible;
+            opacity: 1;
+            top: -80px;
+        }
+
+        .card-content {
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card {
+            position: relative;
+            overflow: visible !important;
+            background: transparent !important;
+        }
+
+        .cards-grid {
+            background: transparent;
+        }
+
+        /* Arama kutusu stilleri */
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #09ff00;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 15px rgba(9, 255, 0, 0.2);
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .dragon-container {
+            position: relative;
+            display: inline-block;
+            margin-left: 15px;
+        }
+
+        .navbar-logo i {
+            color: #09ff00;
+            font-size: 36px;
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        .fire-effect {
+            position: absolute;
+            top: 50%;
+            left: 70%;
+            width: 0;
+            height: 0;
+            transform: translate(-50%, -50%);
+            animation: fireBreath 2s infinite;
+        }
+
+        .fire-effect::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #ff4d00, #ffd700);
+            border-radius: 50% 0 50% 50%;
+            transform: rotate(-45deg);
+            filter: blur(5px);
+            opacity: 0;
+            animation: fireGlow 2s infinite;
+        }
+
+        @keyframes fireBreath {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            10% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0.8;
+            }
+            30% {
+                transform: translate(0%, -50%) scale(1.2);
+                opacity: 1;
+            }
+            60% {
+                transform: translate(50%, -50%) scale(1.8);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translate(100%, -50%) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fireGlow {
+            0% {
+                opacity: 0;
+                transform: rotate(-45deg) scale(0.5);
+            }
+            25% {
+                opacity: 1;
+                transform: rotate(-45deg) scale(1.2);
+            }
+            50% {
+                opacity: 0.8;
+                transform: rotate(-45deg) scale(1.5);
+            }
+            100% {
+                opacity: 0;
+                transform: rotate(-45deg) scale(0.5);
+            }
+        }
+
+        .navbar-logo:hover .fa-dragon {
+            transform: scale(1.1);
+            color: #ff4d00;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-logo:hover .fire-effect::before {
+            animation: fireGlow 1s infinite;
+        }
+
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        body {
+            background-color: #000000;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Kart Grid Yapısı */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Kart Stili */
+        .card {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(9, 255, 0, 0.1);
+            box-shadow: none;
+        }
+
+        /* Avatar Stili */
+        .avatar-circle {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .avatar-img {
+            transform: scale(1.1);
+        }
+
+        /* Kart İçerik Stili */
+        .card-content {
+            margin-top: 1.5rem;
+        }
+
+        .title {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Konuşma Balonu Stili */
+        .speech-bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 12px 20px;
+            max-width: 200px;
+            width: max-content;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #000;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            text-align: center;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px 8px 0;
+            border-style: solid;
+            border-color: rgba(255, 255, 255, 0.95) transparent transparent;
+        }
+
+        /* Container Stili */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Responsive Düzenlemeler */
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 0) {
+                navbar.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+            } else {
+                navbar.style.backgroundColor = 'transparent';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const cards = document.querySelectorAll('.card');
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+
+                cards.forEach(card => {
+                    const title = card.querySelector('.title').textContent.toLowerCase();
+                    const description = card.querySelector('.description').textContent.toLowerCase();
+
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <main class="container">
+        <!-- Mühendislik Kartları -->
+        <div class="cards-grid">
+            <!-- İnşaat Mühendisliği -->
+            <a href="insaat.html" target="_blank" class="card">
+                <div class="avatar-circle">
+                    <div class="speech-bubble">Şu işi bitir, şefinden sana kola! 🏗️🥤</div>
+                    <img src="https://image.fluxpro.ai/undefined/1078acbf-8e20-4acb-bf36-a2835bdb3846.png" alt="İnşaat Mühendisi" class="avatar-img">
+                </div>
+                <div class="card-content">
+                    <h3 class="title">İnşaat Mühendisliği</h3>
+                    <p class="description">Yapı tasarımı ve inşaat yönetimi</p>
+                </div>
+            </a>
+
+            <!-- Elektrik-Elektronik Mühendisliği -->
+            <a href="elektrik.html" target="_blank" class="card">
+                <div class="avatar-circle">
+                    <div class="speech-bubble">Voltaj düşük çıktı, bir de kahve alayım! ⚡☕</div>
+                    <img src="https://ideogram.ai/assets/progressive-image/balanced/response/sn1gKLQzRbSJU__nBcdqIA" alt="Elektrik Mühendisi" class="avatar-img">
+                </div>
+                <div class="card-content">
+                    <h3 class="title">Elektrik-Elektronik Mühendisliği</h3>
+                    <p class="description">Elektrik sistemleri ve elektronik devre tasarımı</p>
+                </div>
+            </a>
+
+            <!-- Makine Mühendisliği -->
+            <a href="makine.html" target="_blank" class="card">
+                <div class="avatar-circle">
+                    <div class="speech-bubble">Bu motorun sesini duydun mu? Müzik gibi! 🔧🎵</div>
+                    <img src="https://www.krea.ai/api/img?f=webp&i=https%3A%2F%2Ftest1-emgndhaqd0c9h2db.a01.azurefd.net%2Fimages%2F631750ac-0154-47c1-9cbc-5adab444d03e.png" alt="Makine Mühendisi" class="avatar-img" style="object-fit: cover;">
+                </div>
+                <div class="card-content">
+                    <h3 class="title">Makine Mühendisliği</h3>
+                    <p class="description">Mekanik sistemler ve üretim teknolojileri</p>
+                </div>
+            </a>
+
+            <!-- Mimarlık -->
+            <a href="mimarlik.html" target="_blank" class="card">
+                <div class="avatar-circle">
+                    <div class="speech-bubble">Bu tasarım bir şaheser olacak! 🏛️✨</div>
+                    <img src="https://www.krea.ai/api/img?f=webp&i=https%3A%2F%2Ftest1-emgndhaqd0c9h2db.a01.azurefd.net%2Fimages%2Fd5c562ba-7ac3-49c9-9f78-590124847dbf.png" alt="Mimar" class="avatar-img">
+                </div>
+                <div class="card-content">
+                    <h3 class="title">Mimarlık</h3>
+                    <p class="description">Yapı tasarımı ve mimari projeler</p>
+                </div>
+            </a>
+
+            <!-- Bilgisayar Mühendisliği -->
+            <a href="bilgisayar.html" target="_blank" class="card">
+                <div class="avatar-circle">
+                    <div class="speech-bubble">Bug'ları hallettim, şimdi bir Red Bull vakti! 💻🚀</div>
+                    <img src="https://www.krea.ai/api/img?f=webp&i=https%3A%2F%2Ftest1-emgndhaqd0c9h2db.a01.azurefd.net%2Fimages%2F34591cce-7475-42f9-a1ad-1001533ad2a4.png" alt="Bilgisayar Mühendisi" class="avatar-img">
+                </div>
+                <div class="card-content">
+                    <h3 class="title">Bilgisayar Mühendisliği</h3>
+                    <p class="description">Yazılım geliştirme ve bilgisayar sistemleri</p>
+                </div>
+            </a>
+
+            <!-- Endüstri Mühendisliği -->
+            <a href="endustri.html" target="_blank" class="card">
+                <div class="avatar-circle">
+                    <div class="speech-bubble">Optimizasyon tamam, şimdi mola zamanı! 📊✨</div>
+                    <img src="https://www.krea.ai/api/img?f=webp&i=https%3A%2F%2Ftest1-emgndhaqd0c9h2db.a01.azurefd.net%2Fimages%2F61287083-42c0-4d21-9cfd-36aca3140674.png" alt="Endüstri Mühendisi" class="avatar-img">
+                </div>
+                <div class="card-content">
+                    <h3 class="title">Endüstri Mühendisliği</h3>
+                    <p class="description">Süreç optimizasyonu ve verimlilik yönetimi</p>
+                </div>
+            </a>
+
+            <!-- Yazılım Mühendisliği -->
+            <a href="yazilim.html" target="_blank" class="card">
+                <div class="avatar-circle">
+                    <div class="speech-bubble">Yeni bir algoritma geliştirdim, test edelim! 💻✨</div>
+                    <img src="https://img.freepik.com/premium-vector/programmer-avatar-illustration_188544-87.jpg" alt="Yazılım Mühendisi" class="avatar-img">
+                </div>
+                <div class="card-content">
+                    <h3 class="title">Yazılım Mühendisliği</h3>
+                    <p class="description">Yazılım geliştirme ve sistem tasarımı</p>
+                </div>
+            </a>
+
+            <!-- Kimya Mühendisliği -->
+            <a href="kimya.html" target="_blank" class="card">
+                <div class="avatar-circle">
+                    <div class="speech-bubble">Bu formül tam istediğimiz gibi! 🧪🔬</div>
+                    <img src="https://img.freepik.com/premium-vector/scientist-avatar-illustration_188544-86.jpg" alt="Kimya Mühendisi" class="avatar-img">
+                </div>
+                <div class="card-content">
+                    <h3 class="title">Kimya Mühendisliği</h3>
+                    <p class="description">Kimyasal süreç ve malzeme tasarımı</p>
+                </div>
+            </a>
+
+            <!-- Mekatronik Mühendisliği -->
+            <a href="mekatronik.html" target="_blank" class="card">
+                <div class="avatar-circle">
+                    <div class="speech-bubble">Robotun sensörleri mükemmel çalışıyor! 🤖⚡</div>
+                    <img src="https://img.freepik.com/premium-vector/robot-engineer-avatar-illustration_188544-88.jpg" alt="Mekatronik Mühendisi" class="avatar-img">
+                </div>
+                <div class="card-content">
+                    <h3 class="title">Mekatronik Mühendisliği</h3>
+                    <p class="description">Robot sistemleri ve otomasyon</p>
+                </div>
+            </a>
+
+            <!-- Çevre Mühendisliği -->
+            <a href="cevre.html" target="_blank" class="card">
+                <div class="avatar-circle">
+                    <div class="speech-bubble">Sürdürülebilir bir gelecek için çalışıyoruz! 🌱🌍</div>
+                    <img src="https://img.freepik.com/premium-vector/environmental-engineer-avatar-illustration_188544-89.jpg" alt="Çevre Mühendisi" class="avatar-img">
+                </div>
+                <div class="card-content">
+                    <h3 class="title">Çevre Mühendisliği</h3>
+                    <p class="description">Çevre koruma ve sürdürülebilirlik</p>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 SUNFYRE. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <!-- JavaScript Bağlantısı -->
+    <script src="script.js"></script>
+
+    <!-- Sayfa Yükleme Animasyonu -->
+    <div id="loader" class="loader">
+        <div class="spinner"></div>
+    </div>
+</body>
+</html>

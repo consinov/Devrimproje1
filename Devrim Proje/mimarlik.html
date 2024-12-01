@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mimarlık - AI Analiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #000;
+            color: #d4af37;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: #d4af37;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .ai-section {
+            background: rgba(212, 175, 55, 0.05);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .ai-section:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.1);
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #d4af37;
+            margin-bottom: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: rgba(212, 175, 55, 0.6);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ai-btn {
+            background: rgba(212, 175, 55, 0.8);
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .ai-btn:hover {
+            background: rgba(212, 175, 55, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .ai-tools {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        li {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 0.8rem;
+            color: rgba(212, 175, 55, 0.9);
+            font-weight: 400;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        li::before {
+            content: "•";
+            color: #d4af37;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 1.5rem;
+            z-index: 1000;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            background: rgba(212, 175, 55, 0.9);
+            color: #000;
+        }
+
+        /* Navbar Stilleri */
+        .navbar {
+            background-color: #000;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .dragon-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .dragon-container i {
+            font-size: 2rem;
+            color: #fff;
+            margin-right: 0.5rem;
+        }
+
+        .navbar-brand span {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .navbar-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-links a:hover {
+            color: #ff4d4d;
+            opacity: 0.9;
+        }
+
+        .navbar-links a.active {
+            color: #ff4d4d;
+            border-bottom: 2px solid #ff4d4d;
+        }
+
+        /* Ana içeriği navbar'ın altına kaydır */
+        .container {
+            padding-top: 6rem;
+        }
+
+        .upload-container {
+            margin: 1rem 0;
+        }
+
+        .upload-area {
+            border: 2px dashed #ff4d4d;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 77, 77, 0.05);
+        }
+
+        .upload-area:hover {
+            border-color: #4a4a4a;
+            background-color: rgba(255, 77, 77, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            color: #ff4d4d;
+            margin-bottom: 1rem;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+            min-height: 50px;
+        }
+
+        .preview-item {
+            position: relative;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .preview-item i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            background: #ff4d4d;
+            color: #fff;
+            border-radius: 4px;
+        }
+
+        .chatbot-container {
+            margin-top: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            height: 200px;
+            padding: 1rem;
+            overflow-y: auto;
+            background: #f9f9f9;
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background: #ff4d4d;
+            color: white;
+            margin-left: auto;
+        }
+
+        .bot-message {
+            background: white;
+            border: 1px solid #e0e0e0;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+        }
+
+        .chat-input button {
+            padding: 0.5rem 1rem;
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .chat-input button:hover {
+            background: #cc3d3d;
+        }
+
+        .upload-container {
+            margin: 1rem 0;
+        }
+
+        .upload-area {
+            border: 2px dashed #4dff4d;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: rgba(77, 255, 77, 0.05);
+        }
+
+        .upload-area:hover {
+            border-color: #4a4a4a;
+            background-color: rgba(77, 255, 77, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            color: #4dff4d;
+            margin-bottom: 1rem;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+            min-height: 50px;
+        }
+
+        .preview-item {
+            position: relative;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .preview-item i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            background: #4dff4d;
+            color: #fff;
+            border-radius: 4px;
+        }
+
+        .section-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background: #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: #ff4d4d;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">
+                <div class="dragon-container">
+                    <i class="fas fa-dragon"></i>
+                    <div class="fire-effect"></div>
+                </div>
+                <span>Sunfyre</span>
+            </a>
+            <div class="navbar-links">
+                <a href="index.html">Ana Sayfa</a>
+                <a href="insaat.html">İnşaat</a>
+                <a href="elektrik.html">Elektrik</a>
+                <a href="makine.html">Makine</a>
+                <a href="mimarlik.html" class="active">Mimarlık</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Mimarlık</h1>
+        </div>
+
+        <div class="content-grid">
+            <div class="ai-section">
+                <h2>Analiz</h2>
+                <div class="section-tabs">
+                    <button class="tab-btn active" onclick="showTab('mukayese')">Mukayese</button>
+                    <button class="tab-btn" onclick="showTab('hakedis')">Hakediş</button>
+                </div>
+                <div id="mukayese" class="tab-content active">
+                    <div class="upload-container">
+                        <div class="upload-area" id="mukayeseUpload">
+                            <i class="fas fa-file-upload upload-icon"></i>
+                            <p>Mukayese dosyalarını yükleyin</p>
+                            <p style="font-size: 0.8rem; color: #888;">(Excel, PDF, Word)</p>
+                        </div>
+                        <div class="preview-grid" id="mukayeseUploadPreview"></div>
+                        <div class="chatbot-container">
+                            <div class="chat-messages" id="mukayeseChatMessages">
+                                <!-- Mesajlar buraya eklenecek -->
+                            </div>
+                            <div class="chat-input">
+                                <input type="text" id="mukayeseChatInput" placeholder="Ne yapmak istediğinizi yazın...">
+                                <button onclick="sendMessage('mukayese')">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>Mimari Detay Analizleri</li>
+                        <li>Malzeme Karşılaştırmaları</li>
+                        <li>Tedarikçi Teklifleri</li>
+                        <li>Maliyet Optimizasyonu</li>
+                        <li>Tasarım Değerlendirmesi</li>
+                    </ul>
+                    <div class="ai-tools">
+                        <button class="ai-btn" onclick="startMukayeseAnalysis()">
+                            <i class="fas fa-calculator"></i>
+                            Mukayese Başlat
+                        </button>
+                    </div>
+                </div>
+                <div id="hakedis" class="tab-content">
+                    <div class="upload-container">
+                        <div class="upload-area" id="hakedisUpload">
+                            <i class="fas fa-file-invoice-dollar upload-icon"></i>
+                            <p>Hakediş dosyalarını yükleyin</p>
+                            <p style="font-size: 0.8rem; color: #888;">(Excel, PDF, Word)</p>
+                        </div>
+                        <div class="preview-grid" id="hakedisUploadPreview"></div>
+                        <div class="chatbot-container">
+                            <div class="chat-messages" id="hakedisChatMessages">
+                                <!-- Mesajlar buraya eklenecek -->
+                            </div>
+                            <div class="chat-input">
+                                <input type="text" id="hakedisChatInput" placeholder="Ne yapmak istediğinizi yazın...">
+                                <button onclick="sendMessage('hakedis')">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>Otomatik Metraj Hesaplama</li>
+                        <li>İmalat Miktarları Analizi</li>
+                        <li>Pursantaj Hesaplamaları</li>
+                        <li>Fiyat Farkı Analizleri</li>
+                        <li>Hakediş Raporu Oluşturma</li>
+                    </ul>
+                    <div class="ai-tools">
+                        <button class="ai-btn" onclick="startHakedisAnalysis()">
+                            <i class="fas fa-file-contract"></i>
+                            Hakediş Hesapla
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ai-section">
+                <h2>Proje</h2>
+                <div class="upload-container">
+                    <div class="upload-area" id="projeUpload">
+                        <i class="fas fa-project-diagram upload-icon"></i>
+                        <p>Proje dosyalarını yükleyin</p>
+                        <p style="font-size: 0.8rem; color: #888;">(CAD, BIM, PDF)</p>
+                    </div>
+                    <div class="preview-grid" id="projeUploadPreview"></div>
+                    <div class="chatbot-container">
+                        <div class="chat-messages" id="projeChatMessages">
+                            <!-- Mesajlar buraya eklenecek -->
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="projeChatInput" placeholder="Ne yapmak istediğinizi yazın...">
+                            <button onclick="sendMessage('proje')">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <ul>
+                    <li>3D Model Analizi</li>
+                    <li>Çizim Optimizasyonu</li>
+                    <li>Detay Kontrolü</li>
+                    <li>Ölçü ve Kot Kontrolü</li>
+                    <li>Revizyon Takibi</li>
+                </ul>
+                <div class="ai-tools">
+                    <button class="ai-btn" onclick="startProjeAnalysis()">
+                        <i class="fas fa-drafting-compass"></i>
+                        Proje Analizi Başlat
+                    </button>
+                </div>
+            </div>
+
+            <script>
+                function showTab(tabId) {
+                    // Tüm tab içeriklerini gizle
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Tüm tab butonlarını pasif yap
+                    document.querySelectorAll('.tab-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Seçilen tabı göster
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    // Seçilen tab butonunu aktif yap
+                    document.querySelector(`.tab-btn[onclick="showTab('${tabId}')"]`).classList.add('active');
+                }
+
+                // Chatbot fonksiyonları
+                function addMessage(type, message, chatId) {
+                    const chatMessages = document.getElementById(chatId);
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `chat-message ${type}-message`;
+                    messageDiv.textContent = message;
+                    chatMessages.appendChild(messageDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+
+                async function sendMessage(section) {
+                    const input = document.getElementById(`${section}ChatInput`);
+                    const message = input.value.trim();
+                    if (!message) return;
+
+                    // Kullanıcı mesajını göster
+                    addMessage('user', message, `${section}ChatMessages`);
+                    input.value = '';
+
+                    try {
+                        const response = await fetch('http://localhost:5000/chat', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: message,
+                                section: section
+                            })
+                        });
+
+                        const result = await response.json();
+                        
+                        // Bot yanıtını göster
+                        addMessage('bot', result.response, `${section}ChatMessages`);
+                    } catch (error) {
+                        console.error('Chat hatası:', error);
+                        addMessage('bot', 'Üzgünüm, bir hata oluştu.', `${section}ChatMessages`);
+                    }
+                }
+
+                // Enter tuşu ile mesaj gönderme
+                document.querySelectorAll('.chat-input input').forEach(input => {
+                    input.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            const section = input.id.replace('ChatInput', '');
+                            sendMessage(section);
+                        }
+                    });
+                });
+
+                // Dosya yükleme ve önizleme fonksiyonları
+                async function handleFileUpload(event, previewAreaId) {
+                    const files = event.target.files || event.dataTransfer.files;
+                    const previewArea = document.getElementById(previewAreaId);
+                    
+                    // Önizleme alanını temizle
+                    previewArea.innerHTML = '';
+
+                    for (const file of files) {
+                        // Önizleme öğesini oluştur
+                        const previewItem = document.createElement('div');
+                        previewItem.className = 'preview-item';
+                        
+                        // Dosya tipine göre ikon seç
+                        let iconClass = 'fa-file';
+                        let iconColor = '#ff4d4d';
+                        
+                        if (file.name.endsWith('.pdf')) {
+                            iconClass = 'fa-file-pdf';
+                            iconColor = '#ff4444';
+                        } else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+                            iconClass = 'fa-file-word';
+                            iconColor = '#4444ff';
+                        } else if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
+                            iconClass = 'fa-file-excel';
+                            iconColor = '#44aa44';
+                        } else if (file.name.endsWith('.dwg') || file.name.endsWith('.rvt')) {
+                            iconClass = 'fa-drafting-compass';
+                            iconColor = '#ff4d4d';
+                        }
+                        
+                        previewItem.innerHTML = `
+                            <i class="fas ${iconClass}" style="color: ${iconColor};"></i>
+                            <p style="margin: 0; font-size: 0.8rem; word-break: break-word;">${file.name}</p>
+                            <div class="status-badge">Yükleniyor...</div>
+                        `;
+                        
+                        previewArea.appendChild(previewItem);
+
+                        // Dosyayı sunucuya yükle
+                        try {
+                            const formData = new FormData();
+                            formData.append('file', file);
+
+                            const response = await fetch('http://localhost:5000/upload', {
+                                method: 'POST',
+                                body: formData
+                            });
+
+                            const result = await response.json();
+                            
+                            // Yükleme durumunu güncelle
+                            const statusBadge = previewItem.querySelector('.status-badge');
+                            if (result.message === 'Dosya başarıyla yüklendi') {
+                                statusBadge.textContent = 'Yüklendi';
+                                statusBadge.style.backgroundColor = '#44aa44';
+                            } else {
+                                statusBadge.textContent = 'Hata';
+                                statusBadge.style.backgroundColor = '#ff4444';
+                            }
+                        } catch (error) {
+                            console.error('Dosya yükleme hatası:', error);
+                            const statusBadge = previewItem.querySelector('.status-badge');
+                            statusBadge.textContent = 'Hata';
+                            statusBadge.style.backgroundColor = '#ff4444';
+                        }
+                    }
+                }
+
+                // Tüm upload alanları için event listener'ları ekle
+                const uploadAreas = document.querySelectorAll('.upload-area');
+                uploadAreas.forEach(area => {
+                    const areaId = area.id;
+                    const previewAreaId = areaId + 'Preview';
+
+                    // Sürükle-bırak olayları
+                    area.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        e.currentTarget.style.borderColor = '#4a4a4a';
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 77, 77, 0.1)';
+                    });
+
+                    area.addEventListener('dragleave', (e) => {
+                        e.preventDefault();
+                        e.currentTarget.style.borderColor = '#ff4d4d';
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 77, 77, 0.05)';
+                    });
+
+                    area.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        e.currentTarget.style.borderColor = '#ff4d4d';
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 77, 77, 0.05)';
+                        handleFileUpload(e, previewAreaId);
+                    });
+
+                    // Tıklama ile dosya seçme
+                    area.addEventListener('click', () => {
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.multiple = true;
+                        
+                        // Dosya tiplerini belirle
+                        if (areaId === 'mukayeseUpload' || areaId === 'hakedisUpload') {
+                            input.accept = '.xlsx,.xls,.pdf,.doc,.docx';
+                        } else if (areaId === 'projeUpload') {
+                            input.accept = '.dwg,.rvt,.pdf,.ifc';
+                        }
+                        
+                        input.onchange = (e) => handleFileUpload(e, previewAreaId);
+                        input.click();
+                    });
+                });
+
+                // Analiz başlatma fonksiyonları
+                async function startAnalysis(type) {
+                    try {
+                        const response = await fetch('http://localhost:5000/analyze', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                type: type,
+                                files: [] // Gerekirse yüklenen dosya listesi eklenebilir
+                            })
+                        });
+
+                        const result = await response.json();
+                        alert(result.message);
+                    } catch (error) {
+                        console.error('Analiz hatası:', error);
+                        alert('Analiz sırasında bir hata oluştu. Lütfen tekrar deneyin.');
+                    }
+                }
+
+                async function startMukayeseAnalysis() {
+                    await startAnalysis('mukayese');
+                }
+
+                async function startHakedisAnalysis() {
+                    await startAnalysis('hakedis');
+                }
+
+                async function startProjeAnalysis() {
+                    await startAnalysis('proje');
+                }
+
+                // Sayfa yüklendiğinde ilk tabı göster
+                document.addEventListener('DOMContentLoaded', () => {
+                    showTab('mukayese');
+                });
+            </script>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yapay Zeka Analiz Sistemi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+        }
+
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            animation: neonText 1.5s infinite alternate;
+            text-shadow: 0 0 10px #0f0, 0 0 20px #0f0, 0 0 30px #0f0;
+        }
+
+        /* Ana Grid */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        /* Analiz Kartları */
+        .analysis-card {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+
+        /* Form Elemanları */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #0f0;
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #0f0;
+            border-radius: 5px;
+            color: #fff;
+            font-family: inherit;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 1rem;
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px dashed #0f0;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-label:hover {
+            background: rgba(0, 255, 0, 0.2);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            background: #0f0;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #00ff00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+
+        /* Sonuç Alanı */
+        .result-area {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(0, 255, 0, 0.05);
+            border-radius: 5px;
+            min-height: 200px;
+        }
+
+        /* Özellik Kartları */
+        .feature-card {
+            background: rgba(0, 255, 0, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #0f0;
+            margin-top: 0;
+        }
+
+        /* İkon Stilleri */
+        .icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #0f0;
+        }
+
+        @keyframes neonText {
+            from { text-shadow: 0 0 10px #0f0, 0 0 20px #0f0, 0 0 30px #0f0; }
+            to { text-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 15px #0f0; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrixCanvas"></canvas>
+
+    <div class="container">
+        <div class="header">
+            <h1>Yapay Zeka Analiz Sistemi</h1>
+        </div>
+
+        <div class="analysis-grid">
+            <!-- Mukayese Analizi -->
+            <div class="analysis-card">
+                <h2><i class="fas fa-balance-scale icon"></i> Mukayese Analizi</h2>
+                <div class="form-group">
+                    <label>Analiz Türü</label>
+                    <select class="form-control">
+                        <option>Malzeme Maliyet Analizi</option>
+                        <option>Teknik Özellik Karşılaştırması</option>
+                        <option>Performans Analizi</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Dosya Yükle</label>
+                    <div class="file-upload">
+                        <label class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i> Excel veya PDF Dosyası Seç
+                            <input type="file" style="display: none;">
+                        </label>
+                    </div>
+                </div>
+                <button class="btn">Analiz Et</button>
+                <div class="result-area">
+                    <p>Analiz sonuçları burada görüntülenecek...</p>
+                </div>
+            </div>
+
+            <!-- Hakediş Analizi -->
+            <div class="analysis-card">
+                <h2><i class="fas fa-calculator icon"></i> Hakediş Analizi</h2>
+                <div class="form-group">
+                    <label>Metraj Dosyası</label>
+                    <div class="file-upload">
+                        <label class="file-upload-label">
+                            <i class="fas fa-file-excel"></i> Metraj Dosyası Yükle
+                            <input type="file" style="display: none;">
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Birim Fiyat Listesi</label>
+                    <div class="file-upload">
+                        <label class="file-upload-label">
+                            <i class="fas fa-file-upload"></i> Birim Fiyat Dosyası Yükle
+                            <input type="file" style="display: none;">
+                        </label>
+                    </div>
+                </div>
+                <button class="btn">Hakediş Hesapla</button>
+                <div class="result-area">
+                    <p>Hakediş sonuçları burada görüntülenecek...</p>
+                </div>
+            </div>
+
+            <!-- Metraj Analizi -->
+            <div class="analysis-card">
+                <h2><i class="fas fa-ruler-combined icon"></i> Metraj Analizi</h2>
+                <div class="form-group">
+                    <label>Proje Dosyası</label>
+                    <div class="file-upload">
+                        <label class="file-upload-label">
+                            <i class="fas fa-file-pdf"></i> PDF veya CAD Dosyası Yükle
+                            <input type="file" style="display: none;">
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Analiz Parametreleri</label>
+                    <select class="form-control">
+                        <option>Otomatik Metraj Çıkarma</option>
+                        <option>Manuel Düzenleme ile Metraj</option>
+                        <option>Karşılaştırmalı Metraj</option>
+                    </select>
+                </div>
+                <button class="btn">Metraj Çıkar</button>
+                <div class="result-area">
+                    <p>Metraj sonuçları burada görüntülenecek...</p>
+                </div>
+            </div>
+
+            <!-- Rapor Oluşturma -->
+            <div class="analysis-card">
+                <h2><i class="fas fa-file-alt icon"></i> Rapor Oluşturma</h2>
+                <div class="form-group">
+                    <label>Rapor Türü</label>
+                    <select class="form-control">
+                        <option>Mukayese Raporu</option>
+                        <option>Hakediş Raporu</option>
+                        <option>Metraj Raporu</option>
+                        <option>Özet Rapor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Rapor Formatı</label>
+                    <select class="form-control">
+                        <option>PDF</option>
+                        <option>Excel</option>
+                        <option>Word</option>
+                    </select>
+                </div>
+                <button class="btn">Rapor Oluştur</button>
+                <div class="result-area">
+                    <p>Rapor önizlemesi burada görüntülenecek...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix yağmuru efekti
+        window.onload = function() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            const charArray = chars.split('');
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const char = charArray[Math.floor(Math.random() * charArray.length)];
+                    ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            setInterval(draw, 35);
+
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        };
+    </script>
+</body>
+</html> 
