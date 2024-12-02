@@ -1,0 +1,15 @@
+# Genel Ayarlar
+title: Mühendis Sayar
+description: Mühendisler için oluşturulmuş bir ürün 
+
+# Yapılandırma Ayarları
+baseurl: "" # Eğer proje sitesi ise /muhendis sayar şeklinde değiştirin
+url: "" # Site adresiniz (örneğin, https://kullaniciadi.github.io)
+
+# Derleme Ayarları
+source: .
+destination: ./_site
+
+# Eklentiler (isteğe bağlı)
+# plugins:
+#   - jekyll-feed
